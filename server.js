@@ -6,8 +6,8 @@ app.get("/", (req, res) => {
   res.send("welcome from home");
 });
 app.get("/books", (req, res) => {
-  res.send("hahahahahahahhahahaaiidhiagduogauodhguagdigaiduygiuagduagdiu");
+  res.send("nothing here");
 });
 app.listen(8000, () => {
-  console.log("server is lestining...");
+  console.log("server is listening...");
 });
