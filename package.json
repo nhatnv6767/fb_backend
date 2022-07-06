@@ -1,10 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +12,15 @@
   "dependencies": {
     "express": "^4.17.2",
     "nodemon": "^2.0.15"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhatnv6767/fb_backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nhatnv6767/fb_backend/issues"
+  },
+  "homepage": "https://github.com/nhatnv6767/fb_backend#readme",
+  "description": ""
 }
