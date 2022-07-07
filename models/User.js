@@ -9,4 +9,100 @@ const userSchema = mongoose.Schema({
         // use it to search
         text: true,
     },
+
+    last_name: {
+        type: String,
+        required: [true, "last_name is required"],
+        trim: true,
+        text: true,
+    },
+
+    username: {
+        type: String,
+        required: [true, "username is required"],
+        trim: true,
+        text: true,
+        unique: true,
+    },
+
+    email: {
+        type: String,
+        required: [true, "email is required"],
+        trim: true,
+    },
+
+    password: {
+        type: String,
+        required: [true, "password is required"],
+    },
+
+    picture: {
+        type: String,
+        trim: true,
+        default: "https://bit.ly/3uvRXju",
+    },
+
+    cover: {
+        type: String,
+        trim: true,
+    },
+
+    gender: {
+        type: String,
+        required: [true, "gender is required"],
+        trim: true,
+    },
+
+    bYear: {
+        type: Number,
+        required: true,
+        trim: true,
+    },
+
+    bMonth: {
+        type: Number,
+        required: true,
+        trim: true,
+    },
+
+    bDay: {
+        type: Number,
+        required: true,
+        trim: true,
+    },
+
+    verified: {
+        type: Boolean,
+        default: false,
+    },
+
+    friends: {
+        type: Array,
+        default: [],
+    },
+
+    // the people that you follow
+    following: {
+        type: Array,
+        default: [],
+    },
+
+    followers: {
+        type: Array,
+        default: [],
+    },
+
+    requests: {
+        type: Array,
+        default: [],
+    },
+
+    search: [
+        {
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: "User"
+            }
+        }
+    ]
 });
