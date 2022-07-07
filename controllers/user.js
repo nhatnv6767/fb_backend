@@ -22,6 +22,10 @@ exports.register = async (req, res) => {
             });
         }
 
+        const check = await User.findOne({
+            email: email
+        });
+
         return;
         const user = await new User({
             first_name,
