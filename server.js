@@ -24,4 +24,5 @@ app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`);
 });
 
-console.log(new Date().getTime());
+// substring is to cut from the string from a points to points
+console.log((+new Date() * Math.random()).toString().substring(0, 1));
