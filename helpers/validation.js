@@ -17,7 +17,8 @@ exports.validateUsername = async (username) => {
         let check = await User.findOne({username});
         if (check) {
             // change username
-
+            // substring is to cut from the string from a points to points
+            username += (+new Date() * Math.random()).toString().substring(0, 1);
             a = true;
         } else {
             a = false;
