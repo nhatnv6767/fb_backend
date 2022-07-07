@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {ObjectId} = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
     first_name: {
@@ -100,9 +101,43 @@ const userSchema = mongoose.Schema({
     search: [
         {
             user: {
-                type: mongoose.Schema.ObjectId,
+                type: ObjectId,
                 ref: "User"
             }
         }
-    ]
+    ],
+
+    details: {
+        bio: {
+            type: String,
+        },
+        otherName: {
+            type: String,
+        },
+        job: {
+            type: String,
+        },
+        workplace: {
+            type: String,
+        },
+        highSchool: {
+            type: String,
+        },
+        college: {
+            type: String,
+        },
+        currentCity: {
+            type: String,
+        },
+        hometown: {
+            type: String,
+        },
+        relationship: {
+            type: String,
+            enum: ["Single", "In a relationship", "Married", "Divorced"],
+        },
+        instagram: {
+            type: String,
+        },
+    }
 });
