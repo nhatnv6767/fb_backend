@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const {validateEmail} = require('../helpers/validation');
 
 exports.register = async (req, res) => {
     try {
@@ -14,6 +15,14 @@ exports.register = async (req, res) => {
             gender,
         } = req.body;
 
+
+        if (!validateEmail(email)) {
+            return res.status(400).json({
+                message: 'Invalid email address',
+            });
+        }
+
+        return;
         const user = await new User({
             first_name,
             last_name,
