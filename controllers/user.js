@@ -1,18 +1,32 @@
-const User = require("User");
+const User = require("../models/User");
 
 exports.register = async (req, res) => {
-    const {
-        first_name,
-        last_name,
-        email,
-        password,
-        username,
-        bYear,
-        bMonth,
-        bDay,
-        gender,
-    } = req.body;
+    try {
+        const {
+            first_name,
+            last_name,
+            email,
+            password,
+            username,
+            bYear,
+            bMonth,
+            bDay,
+            gender,
+        } = req.body;
 
-    const user = await new User(req.body).save();
-    res.json(user);
+        const user = await new User({
+            first_name,
+            last_name,
+            email,
+            password,
+            username,
+            bYear,
+            bMonth,
+            bDay,
+            gender,
+        }).save();
+        res.json(user);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
 };
