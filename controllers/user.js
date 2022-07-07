@@ -1,3 +1,15 @@
-exports.register = (req, res) => {
-    console.log(req.body);
+const User = require("User");
+
+exports.register = async (req, res) => {
+    const {
+        first_name,
+        last_name,
+        email,
+        password,
+        username,
+        bYear,
+        bMonth,
+        bDay,
+        gender,
+    } = req.body;
 };
