@@ -11,3 +11,21 @@ const auth = new OAuth2(
     MAILING_SECRET,
     oauth_link
 );
+
+exports.sendVerificationEmail = (email, name, url) => {
+    auth.setCredentials({
+        refresh_token: MAILING_REFRESH,
+    });
+    const accessToken = auth.getAccessToken();
+    const stmp = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            type: "OAuth2",
+            user: EMAIL,
+            clientId: MAILING_ID,
+            clientSecret: MAILING_SECRET,
+            refreshToken: MAILING_REFRESH,
+            accessToken,
+        }
+    });
+};
