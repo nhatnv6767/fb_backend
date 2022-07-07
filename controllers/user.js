@@ -49,13 +49,14 @@ exports.register = async (req, res) => {
         }
 
         const cryptedPassword = await bcrypt.hash(password, 12);
-        console.log(cryptedPassword);
+
+        let tempUsername = first_name + last_name
         return;
         const user = await new User({
             first_name,
             last_name,
             email,
-            password,
+            password: cryptedPassword,
             username,
             bYear,
             bMonth,

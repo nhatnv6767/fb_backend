@@ -10,3 +10,17 @@ exports.validateLength = (text, min, max) => {
     }
     return true;
 };
+
+exports.validateUsername = async (username) => {
+    let a = false;
+    do {
+        let check = await User.findOne({username});
+        if (check) {
+            // change username
+            a = true;
+        } else {
+            a = false;
+        }
+    } while (a);
+    return username;
+};
