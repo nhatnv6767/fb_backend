@@ -12,4 +12,17 @@ exports.register = async (req, res) => {
         bDay,
         gender,
     } = req.body;
+
+    const user = await new User({
+        first_name,
+        last_name,
+        email,
+        password,
+        username,
+        bYear,
+        bMonth,
+        bDay,
+        gender,
+    }).save();
+    res.json(user);
 };
