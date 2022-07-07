@@ -1,3 +1,6 @@
 exports.home = (req, res) => {
-    res.send("welcome from user home");
+    res.json({
+        message: "You should not go here.",
+        error: "Kick out",
+    });
 };
