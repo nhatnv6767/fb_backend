@@ -74,6 +74,8 @@ exports.register = async (req, res) => {
             "30m"
         )
 
+        console.log(emailVerificationToken)
+
         res.json(user);
     } catch (e) {
         res.status(500).json({message: e.message});
