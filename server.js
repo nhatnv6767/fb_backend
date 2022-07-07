@@ -10,5 +10,5 @@ readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
-    console.log("server is listening...");
+    console.log(`server is running at ${PORT}`);
 });
