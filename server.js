@@ -6,7 +6,10 @@ const {readdirSync} = require("fs");
 const app = express();
 app.use(cors());
 
+// routes
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
+
+// database
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
