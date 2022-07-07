@@ -17,6 +17,7 @@ exports.validateUsername = async (username) => {
         let check = await User.findOne({username});
         if (check) {
             // change username
+
             a = true;
         } else {
             a = false;

@@ -23,3 +23,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`server is running at ${PORT}`);
 });
+
+console.log(new Date().getTime());
