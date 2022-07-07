@@ -139,5 +139,18 @@ const userSchema = mongoose.Schema({
         instagram: {
             type: String,
         },
-    }
+    },
+
+    savedPosts: [
+        {
+            post: {
+                type: ObjectId,
+                ref: "Post",
+            },
+            savedAt: {
+                type: Date,
+                default: new Date(),
+            },
+        }
+    ],
 });
