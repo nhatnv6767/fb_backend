@@ -28,4 +28,15 @@ exports.sendVerificationEmail = (email, name, url) => {
             accessToken,
         }
     });
+
+    const mailOptions = {
+        from: EMAIL,
+        to: email,
+        subject: "Facebook email verification",
+        html: "",
+    };
+    stmp.sendMail(mailOptions, (err, res) => {
+        if (err) return err;
+        return res;
+    });
 };
