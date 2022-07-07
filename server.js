@@ -4,7 +4,7 @@ const app = express();
 app.use(cors());
 const useRoutes = require("./routes/user");
 
-app.use("/", useRoutes);
+app.use("/api", useRoutes);
 
 app.listen(8000, () => {
     console.log("server is listening...");
