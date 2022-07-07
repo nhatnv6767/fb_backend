@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const {validateEmail} = require('../helpers/validation');
+const {validateEmail, validateLength} = require('../helpers/validation');
 
 exports.register = async (req, res) => {
     try {
@@ -26,6 +26,24 @@ exports.register = async (req, res) => {
         if (check) {
             return res.status(400).json({
                 message: 'This email address is already exists, try with a different email address',
+            });
+        }
+
+        if (!validateLength(first_name, 3, 30)) {
+            return res.status(400).json({
+                message: 'First name must be between 3 and 30 characters.',
+            });
+        }
+
+        if (!validateLength(last_name, 3, 30)) {
+            return res.status(400).json({
+                message: 'Last name must be between 3 and 30 characters.',
+            });
+        }
+
+        if (!validateLength(password, 6, 40)) {
+            return res.status(400).json({
+                message: 'Password must be at least 6 characters.',
             });
         }
 
