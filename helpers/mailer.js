@@ -7,8 +7,8 @@ const {EMAIL, MAILING_ID, MAILING_REFRESH, MAILING_SECRET} = process.env;
 
 const auth = new OAuth2(
     MAILING_ID,
-    MAILING_REFRESH,
     MAILING_SECRET,
+    MAILING_REFRESH,
     oauth_link
 );
 
