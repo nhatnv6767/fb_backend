@@ -22,9 +22,12 @@ exports.register = async (req, res) => {
             });
         }
 
-        const check = await User.findOne({
-            email: email
-        });
+        const check = await User.findOne({email});
+        if (check) {
+            return res.status(400).json({
+                message: 'This email address is already exists, try with a different email address',
+            });
+        }
 
         return;
         const user = await new User({
