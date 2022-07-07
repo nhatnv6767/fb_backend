@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -10,6 +11,9 @@ app.use(cors());
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
 
 // database
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+});
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
