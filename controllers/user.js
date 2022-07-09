@@ -96,7 +96,6 @@ exports.register = async (req, res) => {
     }
 };
 
-
 exports.activateAccount = async (req, res) => {
     const {token} = req.body;
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
@@ -110,4 +109,8 @@ exports.activateAccount = async (req, res) => {
         });
         return res.status(200).json({message: "Account has been activated successfully"});
     }
+};
+
+exports.login = async (req, res) => {
+    
 };
