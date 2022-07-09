@@ -4,6 +4,7 @@ const {
     validateLength,
     validateUsername
 } = require('../helpers/validation');
+const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const {generateToken} = require("../helpers/tokens");
 const {sendVerificationEmail} = require("../helpers/mailer");
