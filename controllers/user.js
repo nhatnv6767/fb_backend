@@ -48,6 +48,7 @@ exports.register = async (req, res) => {
             });
         }
 
+
         if (!validateLength(password, 6, 40)) {
             return res.status(400).json({
                 message: 'Password must be at least 6 characters.',
@@ -92,4 +93,10 @@ exports.register = async (req, res) => {
     } catch (e) {
         res.status(500).json({message: e.message});
     }
+};
+
+
+exports.activateAccount = (req, res) => {
+    const {token} = req.body;
+    console.log(token);
 };
