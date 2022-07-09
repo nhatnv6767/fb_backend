@@ -122,6 +122,23 @@ exports.login = async (req, res) => {
         if (!user) {
             return res.status(400).json({message: "The email address you entered is not connected to an account."});
         }
+
+        const check = await bcrypt.compare(password, user.password);
+        if (!check) {
+            return res.status(400).json({message: "Invalid credentials. Please try again."});
+        }
+
+        const token = generateToken({id: user._id.toString()}, "7d");
+        res.send({
+            id: user._id,
+            username: user.username,
+            picture: user.picture,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            token: token,
+            verified: user.verified,
+            message: "Register Success ! Please activate your email to start",
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
