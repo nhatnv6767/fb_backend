@@ -98,5 +98,6 @@ exports.register = async (req, res) => {
 
 exports.activateAccount = (req, res) => {
     const {token} = req.body;
-    console.log(token);
+    const user = jwt.verify(token, process.env.TOKEN_SECRET);
+    console.log(user);
 };
