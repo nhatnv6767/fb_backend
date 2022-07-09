@@ -97,20 +97,28 @@ exports.register = async (req, res) => {
 };
 
 exports.activateAccount = async (req, res) => {
-    const {token} = req.body;
-    const user = jwt.verify(token, process.env.TOKEN_SECRET);
-    const check = await User.findById(user.id);
-    /* This is checking if the user is already verified. <verified> is a field in mongodb */
-    if (check.verified) {
-        return res.status(400).json({message: "This email is already activated"});
-    } else {
-        await User.findByIdAndUpdate(user.id, {
-            verified: true,
-        });
-        return res.status(200).json({message: "Account has been activated successfully"});
+    try {
+        const {token} = req.body;
+        const user = jwt.verify(token, process.env.TOKEN_SECRET);
+        const check = await User.findById(user.id);
+        /* This is checking if the user is already verified. <verified> is a field in mongodb */
+        if (check.verified) {
+            return res.status(400).json({message: "This email is already activated"});
+        } else {
+            await User.findByIdAndUpdate(user.id, {
+                verified: true,
+            });
+            return res.status(200).json({message: "Account has been activated successfully"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
     }
 };
 
 exports.login = async (req, res) => {
-    
+    try {
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
 };
