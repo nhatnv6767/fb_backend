@@ -97,8 +97,11 @@ exports.register = async (req, res) => {
 };
 
 
-exports.activateAccount = (req, res) => {
+exports.activateAccount = async (req, res) => {
     const {token} = req.body;
     const user = jwt.verify(token, process.env.TOKEN_SECRET);
-    console.log(user);
+    const check = await User.findById(user.id);
+    if (check.verified) {
+        return res.status(400).json({message: "This email is already activated"});
+    }
 };
