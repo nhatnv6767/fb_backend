@@ -5,9 +5,27 @@ const dotenv = require("dotenv");
 const {readdirSync} = require("fs");
 dotenv.config();
 
+let allowed = ["http://localhost:8000", "192.168.1.113:8000", "192.168.1.202:8000"];
+
+let options = (req, res) => {
+    let tmp;
+    let origin = req.header("Origin");
+    if (allowed.indexOf(origin) > -1) {
+        tmp = {
+            origin: true,
+            optionSuccessStatus: 200,
+        };
+    } else {
+        tmp = {
+            origin: "nothing",
+        };
+    }
+    res(null, tmp);
+};
+
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors(options));
 
 // routes
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
