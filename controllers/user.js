@@ -156,6 +156,14 @@ exports.sendVerification = async (req, res) => {
         if (user.verified === true) {
             return res.status(400).json({message: "This account is already verified."});
         }
+        const emailVerificationToken = generateToken(
+            {id: user._id.toString()},
+            "30m"
+        );
+
+        const url = `${process.env.BASE_URL}/activate/${emailVerificationToken}`;
+        sendVerificationEmail(user.email, user.first_name, url);
+        return res.status(200).json({message: "Email verification link has been sent to your email."});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
