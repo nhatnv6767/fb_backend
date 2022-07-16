@@ -149,6 +149,14 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.sendVerification = async () => {
-
-}
+exports.sendVerification = async (req, res) => {
+    try {
+        const id = req.user.id;
+        const user = User.findById(id);
+        if (user.verified === true) {
+            return res.status(400).json({message: "This account is already verified."});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
