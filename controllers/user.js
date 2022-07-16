@@ -180,7 +180,9 @@ exports.findUser = async (req, res) => {
         return res.status(200).json({
             email: user.email,
             picture: user.picture,
-        })
+            first_name: user.first_name,
+            last_name: user.last_name,
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
