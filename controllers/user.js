@@ -98,9 +98,15 @@ exports.register = async (req, res) => {
 
 exports.activateAccount = async (req, res) => {
     try {
+        const validUser = req.user.id;
         const {token} = req.body;
         const user = jwt.verify(token, process.env.TOKEN_SECRET);
         const check = await User.findById(user.id);
+
+        if (validUser !== user) {
+            return res.status(400).json({message: "You don't have the authorization to complete this operation"});
+        }
+
         /* This is checking if the user is already verified. <verified> is a field in mongodb */
         if (check.verified) {
             return res.status(400).json({message: "This email is already activated"});
