@@ -19,6 +19,7 @@ module.exports = async function (req, res, next) {
                 return res.status(400).json({message: "File size is too large."});
             }
         });
+        next();
     } catch (e) {
         res.status(500).json({message: e.message});
     }
