@@ -27,9 +27,20 @@ const uploadToCloudinary = async (file, path) => {
                 folder: path
             }, (err, res) => {
                 if (err) {
-
+                    removeTmp(file.tempFilePath);
+                    return res.status(400).json({message: "Upload image failed"});
                 }
+                resolve({
+                    url: res.secure_url,
+                });
             }
-        )
-    })
-}
+        );
+    });
+};
+
+const removeTmp = (path) => {
+    /* It removes the file from the file system. */
+    fs.unlink(path, (err) => {
+        if (err) throw err;
+    });
+};
