@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Code = require("../models/Code");
 const {
     validateEmail,
     validateLength,
@@ -8,8 +9,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const {generateToken} = require("../helpers/tokens");
 const {sendVerificationEmail, sendResetCode} = require("../helpers/mailer");
-const {generateCode} = require("../helpers/generateCode");
-const {Code} = require("mongodb");
+const generateCode = require("../helpers/generateCode");
+
 
 exports.register = async (req, res) => {
     try {
