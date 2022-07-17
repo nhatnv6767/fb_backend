@@ -187,3 +187,16 @@ exports.findUser = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+
+
+exports.sendResetPasswordCode = async (req, res) => {
+    try {
+        const {email} = req.body;
+        const user = await User.findOne({email}).select("-password");
+        /* Removing the code from the database. */
+        await Code.findOneAndRemove({user: user._id});
+        const code = generateCode(5);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
