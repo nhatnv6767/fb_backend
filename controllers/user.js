@@ -202,7 +202,7 @@ exports.sendResetPasswordCode = async (req, res) => {
         const saveCode = await new Code({
             code,
             user: user._id,
-        });
+        }).save();
         sendResetCode(user.email, user.first_name, code);
         return res.status(200).json({
             message: "Email reset code has been sent to your email",
