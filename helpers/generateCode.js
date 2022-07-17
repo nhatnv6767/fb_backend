@@ -6,4 +6,5 @@ export default function generateCode(length) {
         /* Generating a random number between 0 and the length of the schema string. */
         code += schema.charAt(Math.floor(Math.random() * schema.length));
     }
+    return code;
 }
