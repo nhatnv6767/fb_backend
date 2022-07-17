@@ -21,5 +21,15 @@ exports.uploadImages = async (req, res) => {
 };
 
 const uploadToCloudinary = async (file, path) => {
+    return new Promise((resolve, reject) => {
+        cloudinary.v2.uploader.upload(
+            file.tempFilePath, {
+                folder: path
+            }, (err, res) => {
+                if (err) {
 
+                }
+            }
+        )
+    })
 }
