@@ -7,7 +7,7 @@ const {
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const {generateToken} = require("../helpers/tokens");
-const {sendVerificationEmail} = require("../helpers/mailer");
+const {sendVerificationEmail, sendResetCode} = require("../helpers/mailer");
 const {generateCode} = require("../helpers/generateCode");
 const {Code} = require("mongodb");
 
@@ -202,7 +202,10 @@ exports.sendResetPasswordCode = async (req, res) => {
             code,
             user: user._id,
         });
-
+        sendResetCode(user.email, user.first_name, code);
+        return res.status(200).json({
+            message: "Email reset code has been sent to your email",
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
