@@ -211,3 +211,11 @@ exports.sendResetPasswordCode = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+
+exports.validateResetCode = async (req, res) => {
+    try {
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+}
