@@ -21,6 +21,11 @@ exports.uploadImages = async (req, res) => {
     }
 };
 
+/**
+ * It uploads a file to Cloudinary and returns a promise that resolves to an object containing the URL of the uploaded file
+ * @param file - The file object that contains the file's information.
+ * @param path - The path to the folder where you want to upload the image.
+ */
 const uploadToCloudinary = async (file, path) => {
     return new Promise((resolve, reject) => {
         cloudinary.v2.uploader.upload(
