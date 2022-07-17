@@ -1,3 +1,4 @@
+const fs = require('fs');
 module.exports = async function (req, res, next) {
     try {
         if (!req.files || Object.values(req.files).flat().length === 0) {
@@ -10,6 +11,7 @@ module.exports = async function (req, res, next) {
                 && file.mimetype !== "image/gif"
                 && file.mimetype !== "image/webp"
             ) {
+                removeTmp(file.tempFilePath);
                 return res.status(400).json({message: "Unsupported format."});
             }
         });
@@ -17,3 +19,7 @@ module.exports = async function (req, res, next) {
         res.status(500).json({message: e.message});
     }
 };
+
+const removeTmp = (path) => {
+
+}
