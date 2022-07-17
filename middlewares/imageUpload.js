@@ -22,4 +22,4 @@ module.exports = async function (req, res, next) {
 
 const removeTmp = (path) => {
 
-}
+};
