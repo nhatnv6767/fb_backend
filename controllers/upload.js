@@ -13,6 +13,7 @@ exports.uploadImages = async (req, res) => {
         for (const file of files) {
             const url = await uploadToCloudinary(file, path);
             images.push(url);
+            removeTmp(file.tempFilePath);
         }
         res.json(images);
     } catch (e) {
