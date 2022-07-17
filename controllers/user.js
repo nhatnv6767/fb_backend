@@ -226,3 +226,11 @@ exports.validateResetCode = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+
+exports.changePassword = async (req, res) => {
+    try {
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+}
