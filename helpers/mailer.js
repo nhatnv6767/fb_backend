@@ -41,7 +41,7 @@ exports.sendVerificationEmail = (email, name, url) => {
     });
 };
 
-exports.sendVerificationEmail = (email, name, code) => {
+exports.sendResetCode = (email, name, code) => {
     auth.setCredentials({
         refresh_token: MAILING_REFRESH,
     });

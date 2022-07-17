@@ -1,4 +1,4 @@
-export default function generateCode(length) {
+exports.generateCode = (length) => {
     let code = "";
     let schema = "0123456789";
 
@@ -7,4 +7,4 @@ export default function generateCode(length) {
         code += schema.charAt(Math.floor(Math.random() * schema.length));
     }
     return code;
-}
+};

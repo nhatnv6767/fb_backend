@@ -8,6 +8,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const {generateToken} = require("../helpers/tokens");
 const {sendVerificationEmail} = require("../helpers/mailer");
+const {generateCode} = require("../helpers/generateCode");
+const {Code} = require("mongodb");
 
 exports.register = async (req, res) => {
     try {
@@ -196,6 +198,11 @@ exports.sendResetPasswordCode = async (req, res) => {
         /* Removing the code from the database. */
         await Code.findOneAndRemove({user: user._id});
         const code = generateCode(5);
+        const saveCode = await new Code({
+            code,
+            user: user._id,
+        });
+
     } catch (e) {
         res.status(500).json({message: e.message});
     }
