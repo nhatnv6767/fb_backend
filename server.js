@@ -27,6 +27,9 @@ let options = (req, res) => {
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload({
+    useTempFiles: true,
+}));
 
 // routes
 readdirSync("./routes").map((r) => app.use("/", require("./routes/" + r)));
