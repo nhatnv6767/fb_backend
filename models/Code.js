@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+/* Destructuring the `ObjectId` property from the `mongoose.Schema` object. */
 const {ObjectId} = mongoose.Schema;
 
 const codeSchema = new mongoose.Schema({
