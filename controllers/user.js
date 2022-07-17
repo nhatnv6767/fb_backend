@@ -214,8 +214,14 @@ exports.sendResetPasswordCode = async (req, res) => {
 
 exports.validateResetCode = async (req, res) => {
     try {
-
+        const {email, code} = req.body;
+        const user = await User.findOne({email});
+        const DbCode = await Code.findOne({user: user._id});
+        if (DbCode.code !== code) {
+            return res.status(400).json({message: "Verification code is wrong.."});
+        }
+        return res.status(200);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-}
+};
