@@ -5,7 +5,11 @@ module.exports = async function (req, res, next) {
         }
         let files = Object.values(req.files).flat();
         files.forEach((file) => {
-            if (file.mimetype !== "image/jpeg") {
+            if (file.mimetype !== "image/jpeg"
+                && file.mimetype !== "image/png"
+                && file.mimetype !== "image/gif"
+                && file.mimetype !== "image/webp"
+            ) {
                 return res.status(400).json({message: "Unsupported format."});
             }
         });
