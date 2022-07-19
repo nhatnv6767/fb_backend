@@ -10,7 +10,7 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-        const posts = await Post.find();
+        const posts = await Post.find().populate("user");
         res.json(posts);
     } catch (e) {
         res.status(500).json({message: e.message});
