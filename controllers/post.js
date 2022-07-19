@@ -10,8 +10,9 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-
+        const posts = await Post.find();
+        res.json(posts);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-}
+};
