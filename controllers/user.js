@@ -239,3 +239,11 @@ exports.changePassword = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+
+exports.getProfile = async (req, res) => {
+    try {
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+}
