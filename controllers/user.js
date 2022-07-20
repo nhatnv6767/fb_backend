@@ -242,8 +242,9 @@ exports.changePassword = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-
+        const {username} = req.params;
+        res.json(username);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-}
+};
