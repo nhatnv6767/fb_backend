@@ -21,6 +21,14 @@ exports.uploadImages = async (req, res) => {
     }
 };
 
+exports.listImages = async (req, res) => {
+    try {
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+
 /**
  * It uploads a file to Cloudinary and returns a promise that resolves to an object containing the URL of the uploaded file
  * @param file - The file object that contains the file's information.
