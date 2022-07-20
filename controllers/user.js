@@ -243,7 +243,8 @@ exports.changePassword = async (req, res) => {
 exports.getProfile = async (req, res) => {
     try {
         const {username} = req.params;
-        res.json(username);
+        const user = await User.find({username}).select("-password");
+        res.json(user);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
