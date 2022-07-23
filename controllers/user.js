@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Code = require("../models/Code");
+const Post = require("../models/Post");
 const {
     validateEmail,
     validateLength,
@@ -247,7 +248,9 @@ exports.getProfile = async (req, res) => {
         if (!profile) {
             return res.json({ok: false});
         }
-        res.json(profile);
+
+        const posts = await Post.find({user: profile._id}).populate("user");
+        res.json(profile, posts);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
