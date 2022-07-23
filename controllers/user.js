@@ -250,7 +250,7 @@ exports.getProfile = async (req, res) => {
         }
 
         const posts = await Post.find({user: profile._id}).populate("user");
-        res.json(profile, posts);
+        res.json({profile, posts});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
