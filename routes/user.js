@@ -24,6 +24,6 @@ router.post("/sendResetPasswordCode", sendResetPasswordCode);
 router.post("/validateResetCode", validateResetCode);
 router.post("/changePassword", changePassword);
 router.get("/getProfile/:username", authUser, getProfile);
-router.get("/updateProfilePicture", authUser, updateProfilePicture);
+router.put("/updateProfilePicture", authUser, updateProfilePicture);
 
 module.exports = router;
