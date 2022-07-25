@@ -259,10 +259,10 @@ exports.getProfile = async (req, res) => {
 exports.updateProfilePicture = async (req, res) => {
     try {
         const {url} = req.body;
-        const res = await User.findByIdAndUpdate(req.user.id, {
+        await User.findByIdAndUpdate(req.user.id, {
             picture: url,
         });
-        res.send(url);
+        res.json(url);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
