@@ -272,7 +272,11 @@ exports.updateProfilePicture = async (req, res) => {
 
 exports.updateCover = async (req, res) => {
     try {
-        console.log();
+        const {url} = req.body;
+        await User.findByIdAndUpdate(req.user.id, {
+            cover: url,
+        });
+        res.json(url);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
