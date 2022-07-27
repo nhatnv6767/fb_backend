@@ -269,3 +269,11 @@ exports.updateProfilePicture = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+
+exports.updateCover = async (req, res) => {
+    try {
+        console.log();
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
