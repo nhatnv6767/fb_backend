@@ -283,7 +283,17 @@ exports.updateCover = async (req, res) => {
 };
 exports.updateDetails = async (req, res) => {
     try {
-
+        const {infos} = req.body;
+        const updated = await User.findByIdAndUpdate(req.user.id, {
+            details: infos,
+        }, {
+            /* A mongoose option that returns the updated document instead of the original document. */
+            /* if dont have, it's gonna have the user before the update, when having -> make sure to return
+            the updated values of the user
+            * */
+            new: true,
+        });
+        res.json(updated.details);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
