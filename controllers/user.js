@@ -305,6 +305,12 @@ exports.addFriend = async (req, res) => {
         if (req.user.id !== req.params.id) {
             const sender = await User.findById(req.user.id);
             const receiver = await User.findById(req.params.id);
+            /* It's checking if the user is already in the requests array or in the friends array. */
+            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+
+            } else {
+                return res.status(400).json({message: "Already sent"});
+            }
         } else {
             return res.status(400).json({message: "You can't send a request to yourself"});
         }
