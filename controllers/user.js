@@ -334,8 +334,9 @@ exports.cancelRequest = async (req, res) => {
         if (req.user.id !== req.params.id) {
             const sender = await User.findById(req.user.id);
             const receiver = await User.findById(req.params.id);
-            /* It's checking if the user is already in the requests array or in the friends array. */
-            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+            /* Checking if the receiver's requests array includes the sender's id and if the receiver's friends array does
+            not include the sender's id. */
+            if (receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
                     $pull: {requests: sender._id},
@@ -363,8 +364,8 @@ exports.follow = async (req, res) => {
         if (req.user.id !== req.params.id) {
             const sender = await User.findById(req.user.id);
             const receiver = await User.findById(req.params.id);
-            /* It's checking if the user is already in the requests array or in the friends array. */
-            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+            /* Checking if the receiver is not following the sender and the sender is not following the receiver. */
+            if (!receiver.followers.includes(sender._id) && !sender.following.includes(receiver._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
                     $push: {followers: sender._id},
@@ -389,8 +390,9 @@ exports.unfollow = async (req, res) => {
         if (req.user.id !== req.params.id) {
             const sender = await User.findById(req.user.id);
             const receiver = await User.findById(req.params.id);
-            /* It's checking if the user is already in the requests array or in the friends array. */
-            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+            /* Checking if the receiver's followers includes the sender's id and if the sender's following does not include
+            the receiver's id. */
+            if (receiver.followers.includes(sender._id) && !sender.following.includes(receiver._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
                     $pull: {followers: sender._id},
