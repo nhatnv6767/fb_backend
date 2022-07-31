@@ -303,7 +303,10 @@ exports.addFriend = async (req, res) => {
     try {
         /* It's checking if the user is trying to add himself as a friend. */
         if (req.user.id !== req.params.id) {
-
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+        } else {
+            return res.status(400).json({message: "You can't send a request to yourself"});
         }
     } catch (e) {
         res.status(500).json({message: e.message});
