@@ -367,20 +367,17 @@ exports.follow = async (req, res) => {
             if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
-                    $pull: {requests: sender._id},
-                });
-                await receiver.updateOne({
-                    $pull: {followers: sender._id},
+                    $push: {followers: sender._id},
                 });
                 await sender.updateOne({
-                    $pull: {following: sender._id},
+                    $push: {following: receiver._id},
                 });
-                res.json({message: 'You successfully canceled request'});
+                res.json({message: 'Follow successfully'});
             } else {
-                return res.status(400).json({message: "Already canceled"});
+                return res.status(400).json({message: "Already following"});
             }
         } else {
-            return res.status(400).json({message: "You can't cancel a request to yourself"});
+            return res.status(400).json({message: "You can't follow yourself"});
         }
     } catch (e) {
         res.status(500).json({message: e.message});
@@ -396,20 +393,17 @@ exports.unfollow = async (req, res) => {
             if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
-                    $pull: {requests: sender._id},
-                });
-                await receiver.updateOne({
                     $pull: {followers: sender._id},
                 });
                 await sender.updateOne({
-                    $pull: {following: sender._id},
+                    $pull: {following: receiver._id},
                 });
-                res.json({message: 'You successfully canceled request'});
+                res.json({message: 'Unfollow successfully'});
             } else {
-                return res.status(400).json({message: "Already canceled"});
+                return res.status(400).json({message: "Already not following"});
             }
         } else {
-            return res.status(400).json({message: "You can't cancel a request to yourself"});
+            return res.status(400).json({message: "You can't unfollow yourself"});
         }
     } catch (e) {
         res.status(500).json({message: e.message});
