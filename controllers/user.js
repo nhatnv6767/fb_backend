@@ -390,9 +390,7 @@ exports.unfollow = async (req, res) => {
         if (req.user.id !== req.params.id) {
             const sender = await User.findById(req.user.id);
             const receiver = await User.findById(req.params.id);
-            /* Checking if the receiver's followers includes the sender's id and if the sender's following does not include
-            the receiver's id. */
-            if (receiver.followers.includes(sender._id) && !sender.following.includes(receiver._id)) {
+            if (receiver.followers.includes(sender._id) && sender.following.includes(receiver._id)) {
                 await receiver.updateOne({
                     /* It's pushing the sender id to the requests array. */
                     $pull: {followers: sender._id},
