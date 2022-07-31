@@ -328,3 +328,32 @@ exports.addFriend = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.cancelRequest = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* It's checking if the user is already in the requests array or in the friends array. */
+            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+                await receiver.updateOne({
+                    /* It's pushing the sender id to the requests array. */
+                    $pull: {requests: sender._id},
+                });
+                await receiver.updateOne({
+                    $pull: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $pull: {following: sender._id},
+                });
+                res.json({message: 'You successfully canceled request'});
+            } else {
+                return res.status(400).json({message: "Already canceled"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't cancel a request to yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
