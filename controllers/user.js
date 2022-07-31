@@ -418,12 +418,12 @@ exports.acceptRequest = async (req, res) => {
             const sender = await User.findById(req.params.id);
             /* Checking if the sender is following the receiver and if the receiver is following the sender. */
             if (receiver.requests.includes(sender._id)) {
-                await receiver.updateOne({
+                await receiver.update({
                     /* Pushing the sender's id into the friends and following arrays of the receiver. */
                     $push: {friends: sender._id, following: sender._id},
                 });
-                await sender.updateOne({
-                    $push: {friends: receiver._id},
+                await sender.update({
+                    $push: {friends: receiver._id, followers: receiver._id},
                 });
                 await sender.updateOne({
                     $pull: {requests: sender._id},
