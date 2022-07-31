@@ -256,9 +256,28 @@ exports.getProfile = async (req, res) => {
             return res.json({ok: false});
         }
 
+        /* The above code is checking if the user is already friends with the profile. */
+        if (user.friends.includes(profile._id) && profile.friends.includes(user._id)) {
+            friendship.friends = true
+        }
+
+        if (user.following.includes(profile._id)) {
+            friendship.following = true
+        }
+
+        if (user.requests.includes(profile._id)) {
+            friendship.requestReceived = true;
+        }
+
+        if (profile.requests.includes(user._id)) {
+            friendship.requestSent = true
+        }
+
         const posts = await Post.find({user: profile._id})
             .populate("user")
             .sort({createdAt: -1});
+
+
         res.json({...profile.toObject(), posts});
     } catch (e) {
         res.status(500).json({message: e.message});
