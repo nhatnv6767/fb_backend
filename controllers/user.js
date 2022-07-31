@@ -311,6 +311,13 @@ exports.addFriend = async (req, res) => {
                     /* It's pushing the sender id to the requests array. */
                     $push: {requests: sender._id},
                 });
+                await receiver.updateOne({
+                    $push: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $push: {following: sender._id},
+                });
+                res.json({message: 'Friend request has been sent'});
             } else {
                 return res.status(400).json({message: "Already sent"});
             }
