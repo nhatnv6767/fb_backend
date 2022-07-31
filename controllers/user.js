@@ -439,3 +439,31 @@ exports.acceptRequest = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.unfriend = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* Checking if the sender is following the receiver and if the receiver is following the sender. */
+            if (receiver.friends.includes(sender._id) && sender.friends.includes(receiver._id)) {
+                await receiver.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {friends: sender._id, following: sender._id, followers: sender._id},
+                });
+                await sender.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {friends: receiver._id, following: receiver._id, followers: receiver._id},
+                });
+
+                res.json({message: 'Already unfriend...'});
+            } else {
+                return res.status(400).json({message: "Already not friend"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't unfriend yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
