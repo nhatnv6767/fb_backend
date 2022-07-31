@@ -258,11 +258,11 @@ exports.getProfile = async (req, res) => {
 
         /* The above code is checking if the user is already friends with the profile. */
         if (user.friends.includes(profile._id) && profile.friends.includes(user._id)) {
-            friendship.friends = true
+            friendship.friends = true;
         }
 
         if (user.following.includes(profile._id)) {
-            friendship.following = true
+            friendship.following = true;
         }
 
         if (user.requests.includes(profile._id)) {
@@ -270,7 +270,7 @@ exports.getProfile = async (req, res) => {
         }
 
         if (profile.requests.includes(user._id)) {
-            friendship.requestSent = true
+            friendship.requestSent = true;
         }
 
         const posts = await Post.find({user: profile._id})
@@ -278,7 +278,7 @@ exports.getProfile = async (req, res) => {
             .sort({createdAt: -1});
 
 
-        res.json({...profile.toObject(), posts});
+        res.json({...profile.toObject(), posts, friendship});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
