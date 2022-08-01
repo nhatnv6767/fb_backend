@@ -245,7 +245,9 @@ exports.getProfile = async (req, res) => {
     try {
         const {username} = req.params;
         const user = await User.findById(req.user.id);
-        const profile = await User.findOne({username}).select("-password");
+        const profile = await User.findOne({username})
+            .select("-password")
+            .populate("friends", "first_name last_name username picture");
         const friendship = {
             friends: false,
             following: false,
