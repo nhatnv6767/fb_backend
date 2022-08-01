@@ -451,7 +451,7 @@ exports.acceptRequest = async (req, res) => {
                 await sender.update({
                     $push: {friends: receiver._id, followers: receiver._id},
                 });
-                await sender.updateOne({
+                await receiver.updateOne({
                     $pull: {requests: sender._id},
                 });
                 res.json({message: 'Friend request accepted'});
