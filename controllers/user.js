@@ -258,6 +258,8 @@ exports.getProfile = async (req, res) => {
             return res.json({ok: false});
         }
 
+        console.log(profile.friends);
+
         /* The above code is checking if the user is already friends with the profile. */
         if (user.friends.includes(profile._id) && profile.friends.includes(user._id)) {
             friendship.friends = true;
