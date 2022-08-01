@@ -257,8 +257,6 @@ exports.getProfile = async (req, res) => {
             return res.json({ok: false});
         }
 
-        console.log(profile.friends);
-
         /* The above code is checking if the user is already friends with the profile. */
         if (user.friends.includes(profile._id) && profile.friends.includes(user._id)) {
             friendship.friends = true;
@@ -280,7 +278,7 @@ exports.getProfile = async (req, res) => {
             .populate("user")
             .sort({createdAt: -1});
 
-        await profile.populate("friends", "first_name last_name username picture")
+        await profile.populate("friends", "first_name last_name username picture");
 
         res.json({...profile.toObject(), posts, friendship});
     } catch (e) {
