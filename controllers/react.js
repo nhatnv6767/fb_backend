@@ -31,8 +31,12 @@ exports.reactPost = async (req, res) => {
 
 exports.getReacts = async (req, res) => {
     try {
-
+        const reacts = await React.find({postRef: req.params.id});
+        console.log(reacts);
+        res.json({
+            reacts,
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
-}
+};

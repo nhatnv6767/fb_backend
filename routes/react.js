@@ -4,6 +4,6 @@ const {authUser} = require("../middlewares/auth");
 
 const router = express.Router();
 router.put("/reactPost", authUser, reactPost);
-router.get("/getReacts", authUser, getReacts);
+router.get("/getReacts/:id", authUser, getReacts);
 
 module.exports = router;
