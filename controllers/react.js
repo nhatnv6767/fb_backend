@@ -32,7 +32,11 @@ exports.reactPost = async (req, res) => {
 exports.getReacts = async (req, res) => {
     try {
         const reacts = await React.find({postRef: req.params.id});
-        console.log(reacts);
+        const check = await React.findOne({
+            postRef: req.params.id,
+            reactBy: req.user.id,
+        });
+        console.log(check);
         res.json({
             reacts,
         });
