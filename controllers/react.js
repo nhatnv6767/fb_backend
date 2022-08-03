@@ -39,7 +39,7 @@ exports.getReacts = async (req, res) => {
         console.log(check);
         res.json({
             reacts,
-            check: check.react,
+            check: check?.react,
         });
     } catch (e) {
         res.status(500).json({message: e.message});
