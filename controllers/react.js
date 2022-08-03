@@ -40,7 +40,9 @@ exports.getReacts = async (req, res) => {
         * */
         const newReacts = reacts.reduce((group, react) => {
             let key = react["react"];
-            console.log(key);
+            if (!group[key]) {
+                group[key] = []
+            }
         }, {});
 
         const check = await React.findOne({
