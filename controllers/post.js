@@ -33,6 +33,7 @@ exports.comment = async (req, res) => {
             }
         }, {
             new: true,
+            /* Populating the `commentBy` field with the user's information. */
         }).populate("comments.commentBy");
         res.json(newComments.comments);
     } catch (e) {
