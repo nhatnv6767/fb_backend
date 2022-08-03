@@ -39,7 +39,8 @@ exports.getReacts = async (req, res) => {
         console.log(check1);
         * */
         const newReacts = reacts.reduce((group, react) => {
-            let key = react.react;
+            let key = react["react"];
+            console.log(key);
         }, {});
 
         const check = await React.findOne({
