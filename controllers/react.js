@@ -39,7 +39,7 @@ exports.getReacts = async (req, res) => {
         console.log(check1);
         * */
         const newReacts = reacts.reduce((group, react) => {
-            console.log("group", group);
+            console.log("react", react);
         });
 
         const check = await React.findOne({
