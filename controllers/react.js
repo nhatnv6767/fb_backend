@@ -40,7 +40,7 @@ exports.getReacts = async (req, res) => {
         * */
         const newReacts = reacts.reduce((group, react) => {
 
-        }, {/*init value <object>*/});
+        }, [/*init value <array>*/]);
         console.log(newReacts);
 
         const check = await React.findOne({
