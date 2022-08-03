@@ -22,6 +22,14 @@ exports.getAllPosts = async (req, res) => {
 
 exports.comment = async (req, res) => {
     try {
+        const {comment, image, postId} = req.body;
+        let newComments = await Post.findByIdAndUpdate(postId, {
+            $push: {
+                comments: {
+                    comment: comment,
+                }
+            }
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
