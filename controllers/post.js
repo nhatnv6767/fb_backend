@@ -34,7 +34,7 @@ exports.comment = async (req, res) => {
         }, {
             new: true,
             /* Populating the `commentBy` field with the user's information. */
-        }).populate("comments.commentBy");
+        }).populate("comments.commentBy", "picture first_name last_name username");
         res.json(newComments.comments);
     } catch (e) {
         res.status(500).json({message: e.message});
