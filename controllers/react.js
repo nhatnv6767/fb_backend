@@ -83,6 +83,7 @@ exports.getReacts = async (req, res) => {
         res.json({
             reacts,
             check: check?.react,
+            total: reactsArray.length
         });
     } catch (e) {
         res.status(500).json({message: e.message});
