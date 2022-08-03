@@ -31,21 +31,21 @@ exports.reactPost = async (req, res) => {
 
 exports.getReacts = async (req, res) => {
     try {
-        const reacts = await React.find({postRef: req.params.id});
+        const reactsArray = await React.find({postRef: req.params.id});
         /* Checking if the user has already reacted to the post. */
         // .toString because it's an object id
         /*
         * const check1 = reacts.find((x) => x.reactBy.toString() == req.user.id)?.react;
         console.log(check1);
         * */
-        const newReacts = reacts.reduce((group, react) => {
+        const newReacts = reactsArray.reduce((group, react) => {
             let key = react["react"];
             group[key] = group[key] || [];
             group[key].push(react);
             return group;
         }, {});
 
-        const finalArray = [
+        const reacts = [
             {
                 react: 'like',
                 count: newReacts.like ? newReacts.like.length : 0
@@ -76,7 +76,7 @@ exports.getReacts = async (req, res) => {
             reactBy: req.user.id,
         });
         res.json({
-            finalArray,
+            reacts,
             check: check?.react,
         });
     } catch (e) {
