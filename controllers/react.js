@@ -39,9 +39,8 @@ exports.getReacts = async (req, res) => {
         console.log(check1);
         * */
         const newReacts = reacts.reduce((group, react) => {
-
-        }, "/*init value <String>*/");
-        console.log(newReacts);
+            console.log(group);
+        }, {});
 
         const check = await React.findOne({
             postRef: req.params.id,
