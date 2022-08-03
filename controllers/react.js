@@ -39,7 +39,6 @@ exports.getReacts = async (req, res) => {
             postRef: req.params.id,
             reactBy: req.user.id,
         });
-        console.log(check);
         res.json({
             reacts,
             check: check?.react,
