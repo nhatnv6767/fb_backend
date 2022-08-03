@@ -38,7 +38,11 @@ exports.getReacts = async (req, res) => {
         * const check1 = reacts.find((x) => x.reactBy.toString() == req.user.id)?.react;
         console.log(check1);
         * */
-        console.log(reacts);
+        const newReacts = reacts.reduce((group, react) => {
+
+        }, {/*init value <object>*/});
+        console.log(newReacts);
+
         const check = await React.findOne({
             postRef: req.params.id,
             reactBy: req.user.id,
