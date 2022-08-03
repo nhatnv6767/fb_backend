@@ -71,6 +71,11 @@ exports.getReacts = async (req, res) => {
                 count: newReacts.wow ? newReacts.wow.length : 0
             },
         ];
+        reacts.sort((a, b) => {
+            /* It's sorting the array in descending order. */
+            return b.count - a.count;
+        });
+
         const check = await React.findOne({
             postRef: req.params.id,
             reactBy: req.user.id,
