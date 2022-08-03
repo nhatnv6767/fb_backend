@@ -76,7 +76,7 @@ exports.getReacts = async (req, res) => {
             reactBy: req.user.id,
         });
         res.json({
-            reacts,
+            finalArray,
             check: check?.react,
         });
     } catch (e) {
