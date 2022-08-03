@@ -31,7 +31,10 @@ exports.comment = async (req, res) => {
                     commentBy: req.user.id,
                 }
             }
-        });
+        }, {
+            new: true,
+        }).populate("comments.commentBy");
+        res.json(newComments.comments);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
