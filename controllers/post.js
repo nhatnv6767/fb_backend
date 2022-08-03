@@ -27,6 +27,8 @@ exports.comment = async (req, res) => {
             $push: {
                 comments: {
                     comment: comment,
+                    image: image,
+                    commentBy: req.user.id,
                 }
             }
         });
