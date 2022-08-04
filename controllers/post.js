@@ -11,8 +11,13 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-        const following = await User.findById(req.user.id).select("following").following;
-        console.log(following);
+        const followingTemp = await User.findById(req.user.id).select("following");
+        const following = followingTemp.following;
+        const promises = following.map(async (user) => {
+            return await Post.find({user: user})
+                .populate("user", "-password")
+                .populate("comments.commentBy", "first_name last_name picture username");
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
