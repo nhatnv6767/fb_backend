@@ -27,7 +27,7 @@ exports.getAllPosts = async (req, res) => {
             .sort({createdAt: -1})
             .limit(10);
         followingPosts.push(...[...userPosts]);
-        console.log(followingPosts);
+        res.json(followingPosts);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
