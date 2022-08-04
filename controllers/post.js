@@ -29,6 +29,8 @@ exports.comment = async (req, res) => {
                     comment: comment,
                     image: image,
                     commentBy: req.user.id,
+                    // use timezone of Javascript, dont use of mongodb
+                    commentAt: new Date(),
                 }
             }
         }, {
