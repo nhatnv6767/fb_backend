@@ -11,7 +11,7 @@ exports.createPost = async (req, res) => {
 
 exports.getAllPosts = async (req, res) => {
     try {
-        const following = await User.findById(req.user.id).select("following");
+        const following = await User.findById(req.user.id).select("following").following;
         console.log(following);
     } catch (e) {
         res.status(500).json({message: e.message});
