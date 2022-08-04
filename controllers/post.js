@@ -20,7 +20,7 @@ exports.getAllPosts = async (req, res) => {
                 .sort({createdAt: -1})
                 .limit(10);
         });
-        const followingPosts = await (await Promise.all(promises)).flat();
+        const followingPosts = (await Promise.all(promises)).flat();
         console.log(followingPosts);
     } catch (e) {
         res.status(500).json({message: e.message});
