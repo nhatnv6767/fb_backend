@@ -15,11 +15,13 @@ exports.getAllPosts = async (req, res) => {
         const following = followingTemp.following;
         const promises = following.map((user) => {
             return Post.find({user: user})
-                .populate("user", "-password")
+                .populate("user")
                 .populate("comments.commentBy", "first_name last_name picture username")
                 .sort({createdAt: -1})
                 .limit(10);
         });
+        const followingPosts = await Promise.all(promises);
+        console.log(followingPosts);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
