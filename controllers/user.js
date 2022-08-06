@@ -525,6 +525,15 @@ exports.deleteRequest = async (req, res) => {
 };
 exports.search = async (req, res) => {
     try {
+        const searchTerm = req.params.searchTerm;
+        // search everything
+        const results = await User.find({
+            $text: {
+                $search: searchTerm
+            }
+        })
+            .select("first_name last_name username picture");
+        res.json(results);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
