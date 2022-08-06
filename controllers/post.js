@@ -66,7 +66,14 @@ exports.savePost = async (req, res) => {
         const check = user?.savedPosts.find((post) => post.post.toString() === postId);
 
         if (check) {
+            await User.findByIdAndUpdate(req.user.id, {
+                $pull: {
+                    savedPosts: {
+                        post: postId,
 
+                    }
+                }
+            });
         } else {
             await User.findByIdAndUpdate(req.user.id, {
                 $push: {
@@ -75,7 +82,7 @@ exports.savePost = async (req, res) => {
                         saveAt: new Date(),
                     }
                 }
-            })
+            });
         }
 
     } catch (e) {
