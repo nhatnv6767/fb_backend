@@ -540,6 +540,18 @@ exports.search = async (req, res) => {
 };
 exports.addToSearchHistory = async (req, res) => {
     try {
+        const {searchUser} = req.body;
+        const user = await User.findById(req.user.id)
+        const check = user.search.find((x) => x.user.toString() === searchUser);
+        // if exist, update the date
+        if (check) {
+
+        } else {
+            await User.findByIdAndUpdate(req.user.id, {
+                $push: {}
+            })
+        }
+
     } catch (e) {
         res.status(500).json({message: e.message});
     }
