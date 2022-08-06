@@ -78,7 +78,7 @@ exports.getReacts = async (req, res) => {
             reactBy: req.user.id,
         });
         const user = await User.findById(req.user.id);
-        const checkSaved = user?.savedPosts.find((x) => x.post.toString() === req.params.id);
+        const checkSaved = user?.savedPosts.find((x) => x.post === req.params.id);
         res.json({
             reacts,
             check: check?.react,
