@@ -61,6 +61,8 @@ exports.comment = async (req, res) => {
 };
 exports.savePost = async (req, res) => {
     try {
+        const postId = req.params.id;
+        const user = await User.findById(req.user.id);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
