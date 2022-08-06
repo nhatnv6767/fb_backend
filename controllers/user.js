@@ -523,3 +523,9 @@ exports.deleteRequest = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.search = async (req, res) => {
+    try {
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
