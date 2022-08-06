@@ -79,7 +79,7 @@ exports.savePost = async (req, res) => {
                 $push: {
                     savedPosts: {
                         post: postId,
-                        saveAt: new Date(),
+                        savedAt: new Date(),
                     }
                 }
             });
