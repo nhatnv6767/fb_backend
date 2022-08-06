@@ -83,7 +83,7 @@ exports.getReacts = async (req, res) => {
             reacts,
             check: check?.react,
             total: reactsArray.length,
-            checkSaved: checkSaved ? true : false,
+            checkSaved: !!checkSaved,
         });
     } catch (e) {
         res.status(500).json({message: e.message});
