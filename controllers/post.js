@@ -90,6 +90,8 @@ exports.savePost = async (req, res) => {
 };
 exports.deletePost = async (req, res) => {
     try {
+        await Post.findByIdAndRemove(req.params.id);
+        res.json({status: "ok"});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
