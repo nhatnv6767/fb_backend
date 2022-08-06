@@ -64,6 +64,20 @@ exports.savePost = async (req, res) => {
         const postId = req.params.id;
         const user = await User.findById(req.user.id);
         const check = user?.savedPosts.find((post) => post.post.toString() === postId);
+
+        if (check) {
+
+        } else {
+            await User.findByIdAndUpdate(req.user.id, {
+                $push: {
+                    savedPosts: {
+                        post: postId,
+                        saveAt: new Date(),
+                    }
+                }
+            })
+        }
+
     } catch (e) {
         res.status(500).json({message: e.message});
     }
