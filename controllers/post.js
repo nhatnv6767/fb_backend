@@ -88,3 +88,9 @@ exports.savePost = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.deletePost = async (req, res) => {
+    try {
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
