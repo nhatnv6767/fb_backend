@@ -541,15 +541,31 @@ exports.search = async (req, res) => {
 exports.addToSearchHistory = async (req, res) => {
     try {
         const {searchUser} = req.body;
-        const user = await User.findById(req.user.id)
+        const search = {
+            user: searchUser,
+            createdAt: new Date(),
+        };
+        const user = await User.findById(req.user.id);
         const check = user.search.find((x) => x.user.toString() === searchUser);
         // if exist, update the date
         if (check) {
-
+            await User.updateOne({
+                /* Checking to see if the user has already searched for the same item. */
+                _id: req.user.id,
+                "search._id": check._id,
+            }, {
+                // set whatever we want
+                $set: {
+                    /* Searching for the createdAt field in the search array. */
+                    "search.$.createdAt": new Date(),
+                }
+            });
         } else {
             await User.findByIdAndUpdate(req.user.id, {
-                $push: {}
-            })
+                $push: {
+                    search,
+                }
+            });
         }
 
     } catch (e) {
