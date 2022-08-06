@@ -63,6 +63,7 @@ exports.savePost = async (req, res) => {
     try {
         const postId = req.params.id;
         const user = await User.findById(req.user.id);
+        const check = user?.savedPosts.find((post) => post.post.toString() === postId);
     } catch (e) {
         res.status(500).json({message: e.message});
     }
