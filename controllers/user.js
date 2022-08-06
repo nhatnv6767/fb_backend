@@ -572,3 +572,9 @@ exports.addToSearchHistory = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.getSearchHistory = async (req, res) => {
+    try {
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
