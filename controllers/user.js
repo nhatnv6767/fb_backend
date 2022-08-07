@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt');
 const {generateToken} = require("../helpers/tokens");
 const {sendVerificationEmail, sendResetCode} = require("../helpers/mailer");
 const generateCode = require("../helpers/generateCode");
-
+const mongoose = require("mongoose");
 
 exports.register = async (req, res) => {
     try {
@@ -244,15 +244,43 @@ exports.changePassword = async (req, res) => {
 exports.getProfile = async (req, res) => {
     try {
         const {username} = req.params;
-        const profile = await User.findOne({username}).select("-password");
+        const user = await User.findById(req.user.id);
+        const profile = await User.findOne({username})
+            .select("-password");
+        const friendship = {
+            friends: false,
+            following: false,
+            requestSent: false,
+            requestReceived: false,
+        };
         if (!profile) {
             return res.json({ok: false});
         }
 
+        /* The above code is checking if the user is already friends with the profile. */
+        if (user.friends.includes(profile._id) && profile.friends.includes(user._id)) {
+            friendship.friends = true;
+        }
+
+        if (user.following.includes(profile._id)) {
+            friendship.following = true;
+        }
+
+        if (user.requests.includes(profile._id)) {
+            friendship.requestReceived = true;
+        }
+
+        if (profile.requests.includes(user._id)) {
+            friendship.requestSent = true;
+        }
+
         const posts = await Post.find({user: profile._id})
-            .populate("user")
+            .populate("user", "-password").populate("comments.commentBy", "first_name last_name picture username commentAt")
             .sort({createdAt: -1});
-        res.json({...profile.toObject(), posts});
+
+        await profile.populate("friends", "first_name last_name username picture");
+
+        res.json({...profile.toObject(), posts, friendship});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
@@ -294,6 +322,299 @@ exports.updateDetails = async (req, res) => {
             new: true,
         });
         res.json(updated.details);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+
+exports.addFriend = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* It's checking if the user is already in the requests array or in the friends array. */
+            if (!receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+                await receiver.updateOne({
+                    /* It's pushing the sender id to the requests array. */
+                    $push: {requests: sender._id},
+                });
+                await receiver.updateOne({
+                    $push: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $push: {following: receiver._id},
+                });
+                res.json({message: 'Friend request has been sent'});
+            } else {
+                return res.status(400).json({message: "Already sent"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't send a request to yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.cancelRequest = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* Checking if the receiver's requests array includes the sender's id and if the receiver's friends array does
+            not include the sender's id. */
+            if (receiver.requests.includes(sender._id) && !receiver.friends.includes(sender._id)) {
+                await receiver.updateOne({
+                    /* It's pushing the sender id to the requests array. */
+                    $pull: {requests: sender._id},
+                });
+                await receiver.updateOne({
+                    $pull: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $pull: {following: sender._id},
+                });
+                res.json({message: 'You successfully canceled request'});
+            } else {
+                return res.status(400).json({message: "Already canceled"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't cancel a request to yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.follow = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* Checking if the receiver is not following the sender and the sender is not following the receiver. */
+            if (!receiver.followers.includes(sender._id) && !sender.following.includes(receiver._id)) {
+                await receiver.updateOne({
+                    /* It's pushing the sender id to the requests array. */
+                    $push: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $push: {following: receiver._id},
+                });
+                res.json({message: 'Follow successfully'});
+            } else {
+                return res.status(400).json({message: "Already following"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't follow yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.unfollow = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* Checking if the sender is following the receiver and if the receiver is following the sender. */
+            if (receiver.followers.includes(sender._id) && sender.following.includes(receiver._id)) {
+                await receiver.updateOne({
+                    /* It's pushing the sender id to the requests array. */
+                    $pull: {followers: sender._id},
+                });
+                await sender.updateOne({
+                    $pull: {following: receiver._id},
+                });
+                res.json({message: 'Unfollow successfully'});
+            } else {
+                return res.status(400).json({message: "Already not following"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't unfollow yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.acceptRequest = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const receiver = await User.findById(req.user.id);
+            const sender = await User.findById(req.params.id);
+            /* Checking if the sender is following the receiver and if the receiver is following the sender. */
+            if (receiver.requests.includes(sender._id)) {
+                await receiver.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $push: {friends: sender._id, following: sender._id},
+                });
+                await sender.update({
+                    $push: {friends: receiver._id, followers: receiver._id},
+                });
+                await receiver.updateOne({
+                    $pull: {requests: sender._id},
+                });
+                res.json({message: 'Friend request accepted'});
+            } else {
+                return res.status(400).json({message: "Already friend"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't accept a request from yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.unfriend = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const sender = await User.findById(req.user.id);
+            const receiver = await User.findById(req.params.id);
+            /* Checking if the sender is following the receiver and if the receiver is following the sender. */
+            if (receiver.friends.includes(sender._id) && sender.friends.includes(receiver._id)) {
+                await receiver.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {friends: sender._id, following: sender._id, followers: sender._id},
+                });
+                await sender.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {friends: receiver._id, following: receiver._id, followers: receiver._id},
+                });
+
+                res.json({message: 'Already unfriend...'});
+            } else {
+                return res.status(400).json({message: "Already not friend"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't unfriend yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.deleteRequest = async (req, res) => {
+    try {
+        /* It's checking if the user is trying to add himself as a friend. */
+        if (req.user.id !== req.params.id) {
+            const receiver = await User.findById(req.user.id);
+            const sender = await User.findById(req.params.id);
+            /* Checking if the sender is following the receiver and if the receiver is following the sender. */
+            if (receiver.requests.includes(sender._id)) {
+                await receiver.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {requests: sender._id, followers: sender._id},
+                });
+                await sender.update({
+                    /* Pushing the sender's id into the friends and following arrays of the receiver. */
+                    $pull: {following: receiver._id},
+                });
+
+                res.json({message: 'Delete request successfully...'});
+            } else {
+                return res.status(400).json({message: "Already deleted request"});
+            }
+        } else {
+            return res.status(400).json({message: "You can't delete request yourself"});
+        }
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.search = async (req, res) => {
+    try {
+        const searchTerm = req.params.searchTerm;
+        // search everything
+        const results = await User.find({
+            $text: {
+                $search: searchTerm
+            }
+        })
+            .select("first_name last_name username picture");
+        res.json(results);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.addToSearchHistory = async (req, res) => {
+    try {
+        const {searchUser} = req.body;
+        const search = {
+            user: searchUser,
+            createdAt: new Date(),
+        };
+        const user = await User.findById(req.user.id);
+        const check = user.search.find((x) => x.user.toString() === searchUser);
+        // if exist, update the date
+        if (check) {
+            await User.updateOne({
+                /* Checking to see if the user has already searched for the same item. */
+                _id: req.user.id,
+                "search._id": check._id,
+            }, {
+                // set whatever we want
+                $set: {
+                    /* Searching for the createdAt field in the search array. */
+                    "search.$.createdAt": new Date(),
+                }
+            });
+        } else {
+            await User.findByIdAndUpdate(req.user.id, {
+                $push: {
+                    search,
+                }
+            });
+        }
+
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.getSearchHistory = async (req, res) => {
+    try {
+        const results = await User.findById(req.user.id)
+            .select("search")
+            .populate("search.user", "first_name last_name username picture");
+        res.json(results.search);
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.removeFromSearch = async (req, res) => {
+    try {
+        const {searchUser} = req.body;
+        await User.updateOne({
+                _id: req.user.id
+            },
+            {
+                $pull: {
+                    search: {user: searchUser}
+                }
+            });
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
+exports.getFriendsPageInfos = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+            .select("friends requests")
+            .populate("friends", "first_name last_name picture username")
+            .populate("requests", "first_name last_name picture username");
+        /* Finding all the users that have the current user's id in their requests array. */
+        const sentRequests = await User.find({
+            requests: mongoose.Types.ObjectId(req.user.id)
+        }).select("first_name last_name picture username");
+        res.json({
+            /* Assigning the value of the friends property of the user object to the friends property of the userProfile
+            object. */
+            friends: user.friends,
+            /* Creating a new object called user and assigning it the values of the user object. */
+            requests: user.requests,
+            sentRequests,
+        });
     } catch (e) {
         res.status(500).json({message: e.message});
     }
