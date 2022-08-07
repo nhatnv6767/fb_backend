@@ -603,8 +603,17 @@ exports.getFriendsPageInfos = async (req, res) => {
             .select("friends requests")
             .populate("friends", "first_name last_name picture username")
             .populate("requests", "first_name last_name picture username");
+        /* Finding all the users that have the current user's id in their requests array. */
         const sentRequests = await User.find({
             requests: mongoose.Types.ObjectId(req.user.id)
+        }).select("first_name last_name picture username");
+        res.json({
+            /* Assigning the value of the friends property of the user object to the friends property of the userProfile
+            object. */
+            friends: user.friends,
+            /* Creating a new object called user and assigning it the values of the user object. */
+            requests: user.requests,
+            sentRequests,
         });
     } catch (e) {
         res.status(500).json({message: e.message});
