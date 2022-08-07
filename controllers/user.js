@@ -582,3 +582,9 @@ exports.getSearchHistory = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.removeFromSearch = async (req, res) => {
+    try {
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
