@@ -599,6 +599,11 @@ exports.removeFromSearch = async (req, res) => {
 };
 exports.getFriendsPageInfos = async (req, res) => {
     try {
+        const user = await User.findById(req.user.id)
+            .select("friends requests")
+            .populate("friends", "first_name last_name picture username")
+            .populate("requests", "first_name last_name picture username");
+        const sentRequest = await User.find({});
     } catch (e) {
         res.status(500).json({message: e.message});
     }
