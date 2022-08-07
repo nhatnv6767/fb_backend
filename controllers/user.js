@@ -597,3 +597,9 @@ exports.removeFromSearch = async (req, res) => {
         res.status(500).json({message: e.message});
     }
 };
+exports.getFriendsPageInfos = async (req, res) => {
+    try {
+    } catch (e) {
+        res.status(500).json({message: e.message});
+    }
+};
